@@ -1,19 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0
-
-// Amended by HashLips
-/**
-    !Disclaimer!
-    These contracts have been used to create tutorials,
-    and was created for the purpose to teach people
-    how to create smart contracts on the blockchain.
-    please review this code on your own before using any of
-    the following code for production.
-    HashLips will not be liable in any way if for the use 
-    of the code. That being said, the code has been tested 
-    to the best of the developers' knowledge to work as intended.
-*/
-
 pragma solidity >=0.7.0 <0.9.0;
+
+/**
+ * @title Tiki Island contract
+ * @dev Extends ERC721 Non-Fungible Token Standard basic implementation
+ */
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
@@ -51,17 +42,17 @@ contract NFT is ERC721Enumerable, Ownable {
 
   // public
   function mint(uint256 _mintAmount) public payable {
-    require(!paused, "the contract is paused");
+    require(!paused, "Aloha, the contract is paused");
     uint256 supply = totalSupply();
-    require(_mintAmount > 0, "need to mint at least 1 NFT");
-    require(_mintAmount <= maxMintAmount, "max mint amount per session exceeded");
-    require(supply + _mintAmount <= maxSupply, "max NFT limit exceeded");
+    require(_mintAmount > 0, "Aloha, You need to mint at least 1 Tiki");
+    require(_mintAmount <= maxMintAmount, "Aloha Brah! You can only mint 20 Tikis per transaction, Mahalo!");
+    require(supply + _mintAmount <= maxSupply, "max Tiki limit exceeded");
 
     if (msg.sender != owner()) {
         if(onlyWhitelisted == true) {
-            require(isWhitelisted(msg.sender), "user is not whitelisted");
+            require(isWhitelisted(msg.sender), "Aloha, your not whitelisted! We cant wait for you to join the Ohana, come back during the public mint, Mahalo!");
             uint256 ownerMintedCount = addressMintedBalance[msg.sender];
-            require(ownerMintedCount + _mintAmount <= nftPerAddressLimit, "max NFT per address exceeded");
+            require(ownerMintedCount + _mintAmount <= nftPerAddressLimit, "Aloha Brah! You have reached the max amount of 20 Tikis per address! You are holding great amounts of Mana loa right now! Hope to see you at Pau hana!");
         }
         require(msg.value >= cost * _mintAmount, "insufficient funds");
     }
@@ -159,15 +150,24 @@ contract NFT is ERC721Enumerable, Ownable {
   }
  
   function withdraw() public payable onlyOwner {
-    // This will pay HashLips 5% of the initial sale.
-    // You can remove this if you want, or keep it in to support HashLips and his channel.
+    // This will pay  5% of the initial sale.
     // =============================================================================
-    (bool hs, ) = payable(0x943590A42C27D08e3744202c4Ae5eD55c2dE240D).call{value: address(this).balance * 5 / 100}("");
+    (bool hs, ) = payable(0xaaBA307674765C829E6B154ea3A291934808e5a7).call{value: address(this).balance * 5 / 100}("");
     require(hs);
     // =============================================================================
     
-    // This will payout the owner 95% of the contract balance.
-    // Do not remove this otherwise you will not be able to withdraw the funds.
+    // This will pay 5% of the initial sale.
+    // =============================================================================
+    (bool hs, ) = payable(0x32a62a413d16106FE8424aeF3D150b4E5675216C).call{value: address(this).balance * 5 / 100}("");
+    require(hs);
+    // =============================================================================
+        // This will pay  5% of the initial sale.
+    // =============================================================================
+    (bool hs, ) = payable(0x020F682539B5fc22361119C3eCA82E23Fe31d823).call{value: address(this).balance * 5 / 100}("");
+    require(hs);
+    // =============================================================================
+
+    // This will payout the owner the contract balance.
     // =============================================================================
     (bool os, ) = payable(owner()).call{value: address(this).balance}("");
     require(os);
