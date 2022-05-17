@@ -15,10 +15,10 @@ contract NFT is ERC721Enumerable, Ownable {
   string public baseURI;
   string public baseExtension = ".json";
   string public notRevealedUri;
-  uint256 public cost = .0000001 ether;
+  uint256 public cost = .0000001 ether; // .01 ETH
   uint256 public maxSupply = 10000;
   uint256 public maxMintAmount = 20;
-  uint256 public nftPerAddressLimit = 10;
+  uint256 public nftPerAddressLimit = 20;
   bool public paused = false;
   bool public revealed = false;
   bool public onlyWhitelisted = true;
@@ -42,19 +42,19 @@ contract NFT is ERC721Enumerable, Ownable {
 
   // public
   function mint(uint256 _mintAmount) public payable {
-    require(!paused, "Aloha, the contract is paused");
+    require(!paused, "Aloha, the contract is paused, Come back later");
     uint256 supply = totalSupply();
     require(_mintAmount > 0, "Aloha, You need to mint at least 1 Tiki");
     require(_mintAmount <= maxMintAmount, "Aloha Brah! You can only mint 20 Tikis per transaction, Mahalo!");
-    require(supply + _mintAmount <= maxSupply, "max Tiki limit exceeded");
+    require(supply + _mintAmount <= maxSupply, "Max Tiki limit exceeded, Tray to mint less");
 
     if (msg.sender != owner()) {
         if(onlyWhitelisted == true) {
-            require(isWhitelisted(msg.sender), "Aloha, your not whitelisted! We cant wait for you to join the Ohana, come back during the public mint, Mahalo!");
+            require(isWhitelisted(msg.sender), "Aloha, your not whitelisted! We cant wait for you to join the Ohana, Come back during the public mint, Mahalo!");
             uint256 ownerMintedCount = addressMintedBalance[msg.sender];
             require(ownerMintedCount + _mintAmount <= nftPerAddressLimit, "Aloha Brah! You have reached the max amount of 20 Tikis per address! You are holding great amounts of Mana loa right now! Hope to see you at Pau hana!");
         }
-        require(msg.value >= cost * _mintAmount, "insufficient funds");
+        require(msg.value >= cost * _mintAmount, "insufficient funds, Need more ETH in your account! Hurry make that transfer!");
     }
 
     for (uint256 i = 1; i <= _mintAmount; i++) {
